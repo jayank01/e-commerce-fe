@@ -18,9 +18,8 @@ const Register = () => {
   });
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
-    // console.log(e);
     let { name, value } = e.target;
-    // console.log(name);
+
     setFormData((pre) => {
       return { ...pre, [name]: value};
     });
@@ -29,7 +28,7 @@ const Register = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const dataToSend = formData;
-    // console.log(JSON.stringify(dataToSend));
+    
     try {
       const response = await fetch("http://localhost:8080/users/register", {
         method: "POST",
@@ -39,7 +38,7 @@ const Register = () => {
         body: JSON.stringify(dataToSend),
       });
 
-      // console.log(response);
+      
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -49,7 +48,7 @@ const Register = () => {
       navigate("/");
     } catch (error) {
       console.error("Error sending data:", error);
-      // Handle error scenarios as needed
+      
     }
   };
   return (

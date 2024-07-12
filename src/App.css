@@ -7,7 +7,6 @@
 .main {
   width: 100%;
   height: 100vh;
-  /* background-color: #252424; */
   background: url('./assets/localvendor.jpg') ;
   background-size: cover;
   background-repeat: no-repeat;
@@ -22,53 +21,36 @@
   background-color: rgba(2, 25, 27, 0.821);
   color: #fff;
   
-  /* padding: .5em; */
-  /* box-shadow: 2px 2px 15px rgb(207, 204, 204), -2px -2px 15px rgb(207, 204, 204); */
 }
 
 .formContainer form{
   width: 90%;
   min-width: 450px;
-  /* border: solid; */
   padding: .5em;
 }
 
 .formContainer form input{
   min-width: 300px;
-  /* border: solid red; */
+
 }
 
 #checkBox{
   min-width: 10px;
-  /* background-color: red; */
 }
 .formContainer form .group{
-  /* border: solid red; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-align: left;
 }
 .formContainer form .group label{
-  /* border: solid; */
   min-width: 90px;
   font-weight: 500;
 }
-/* .formContainer form .group .dropdown{
 
-  /* border: solid red; */
-  /* right: 61%; */
-  /* width: 80%; */
-  /* color: black; */
-/* } */
-
-/* .formContainer form .group .droptoggle{
-  background-color: #fff;
-}  */
 
 .login {
   width: 30%;
-  /* height: 50vh; */
 }
 
 
@@ -95,25 +77,20 @@ input[type="number"] {
   }
   .formContainer form{
     min-width: 30%;
-    /* border: solid; */
   }
   .formContainer form input{
     min-width: 60%;
-    /* border: solid red; */
   }
   
 }
 @media screen and ((min-width: 300px)and (max-width: 400px)) {
   .formContainer {
     min-width: 320px; /* Adjusted width for screens 700px and above */
-    /* border: solid blue; */
   }
   .formContainer form{
     min-width: 20%;
-    /* border: solid; */
   }
   .formContainer form input{
     min-width: 60%;
-    /* border: solid red; */
   }
 }

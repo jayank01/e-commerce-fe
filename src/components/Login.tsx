@@ -21,25 +21,21 @@ const Login = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // console.log(loginData);
 
     try {
       const response = await fetch("http://localhost:8080/users/login", {
         method: "POST",
         headers: {
-            // 'Authorization': `Bearer ${token}`,
             "content-type": "application/json",
           },
         body: JSON.stringify(loginData),
       });
-    //   console.log(response);
+    
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-    //   console.log(data);
-    //   console.log(response);
-    //   localStorage.setItem("token",response.token)
+    
       toast.success(`${data.message}`);
 
       data.role === "USER" ? navigate("/home") : navigate("/vendor");
@@ -75,10 +71,8 @@ const Login = () => {
             <Form.Label className="my-auto">Password</Form.Label>
 
             <Form.Control
-              // type={showPassword ? "text" : "password"}
               type="password"
               placeholder="Password"
-              // aria-describedby="passwordToggle"
               style={{ zIndex: "1" }}
               className="rounded"
               onChange={handleChange}
@@ -86,8 +80,6 @@ const Login = () => {
               value={loginData.password}
             />
           </Form.Group>
-
-          {/* <p className="mt-3">Forgot Password?</p> */}
 
           <FormGroup className="mt-5 d-flex align-items-center group ">
             <p className="text-center my-auto">
