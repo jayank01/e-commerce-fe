@@ -1,4 +1,3 @@
-
 const Home = () => {
   return (
     <div className='w-100 home d-flex justify-content-center align-items-center bg-dark text-light'>
@@ -6,5 +5,4 @@ const Home = () => {
     </div>
   )
 }
-
 export default Home

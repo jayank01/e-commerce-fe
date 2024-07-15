@@ -1,4 +1,3 @@
-
 const Vendor = () => {
   return (
     <div className='w-100 vendor d-flex justify-content-center align-items-center bg-dark text-light'>
@@ -6,5 +5,4 @@ const Vendor = () => {
     </div>
   )
 }
-
 export default Vendor

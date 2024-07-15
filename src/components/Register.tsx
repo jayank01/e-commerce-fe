@@ -1,61 +1,15 @@
-import { useState } from "react";
 import { Form, Button, FormGroup } from "react-bootstrap";
-import { Link,useNavigate } from "react-router-dom";
-import { userData } from "../models/userdata.model";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { userRegistration } from "../controller/userRegistration";
+import { REGISTER_HEADING } from "../utils/constants";
 
 const Register = () => {
-  const navigate = useNavigate();
-  
-
-  const [formData, setFormData] = useState<userData>({
-    firstName: "",
-    lastName: "",
-    username: "",
-    password: "",
-    phoneNumber: "",
-    role: "USER"
-  });
-
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    let { name, value } = e.target;
-
-    setFormData((pre) => {
-      return { ...pre, [name]: value};
-    });
-  };
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    const dataToSend = formData;
-    
-    try {
-      const response = await fetch("http://localhost:8080/users/register", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      toast.success("User registration successfull");
-      navigate("/");
-    } catch (error) {
-      console.error("Error sending data:", error);
-      
-    }
-  };
+  const {formData,handleChange,handleSubmit} = userRegistration();
   return (
     <>
       <div className="main  d-flex justify-content-center align-items-center ">
         <div className="formContainer  d-flex flex-column justify-content-center align-items-center">
-          <h1 >Register</h1>
+          <h1 >{REGISTER_HEADING}</h1>
 
           <Form className="mt-3 " onSubmit={handleSubmit}>
             <Form.Group
