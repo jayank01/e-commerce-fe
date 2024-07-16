@@ -18,7 +18,7 @@
   /* height: 75vh; */
   padding: 1.2em;
   border-radius: 0.6em;
-  background-color: rgba(2, 25, 27, 0.821);
+  background-color: rgba(2, 25, 27, 0.877);
   color: #fff;
   
 }
@@ -56,6 +56,12 @@
 
 .vendor,.home{
   height: 100vh;
+}
+
+.forgot{
+  /* width: 30%; */
+  min-width: 400px;
+  min-height: max-content;
 }
 
 /* Remove the arrow spinner from input type number*/

@@ -39,8 +39,8 @@ const Login = () => {
               value={loginData.password}
             />
           </Form.Group>
-            {/* <p className="mt-4">FORGOT PASSWORD ?</p> */}
-          <FormGroup className="mt-5 d-flex align-items-center group ">
+            <Link to={"/forgotPassword"} className="mt-4 my-2 d-block" style={{ textDecoration: "none" }}> Forgot Password ?</Link>
+          <FormGroup className="mt-3 d-flex align-items-center group ">
             <p className="text-center my-auto">
               Don't have account ?{" "}
               <Link to="/register" style={{ textDecoration: "none" }}>

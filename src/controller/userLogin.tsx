@@ -34,11 +34,24 @@ export const userLogin = () => {
       );
 
       const data = await response.json();
+    //   console.log(data);
       Cookies.set('jwt',`${data.jwtToken}`)
+
       if (!response.ok) {
         throw new Error("Failed to Login");
       }
-      data.role === "USER" ? navigate("/home") : navigate("/vendor");
+      if(data.role === "ADMIN"){
+        toast.success("Admin Logged in Successfully");
+        navigate("/admin")
+      }
+      else if(data.role === "VENDOR"){
+        toast.success("Vendor Logged in Successfully");
+        navigate("/vendor");
+      }
+      else{
+        navigate("/home");
+        toast.success("User Logged in Successfully");
+      }
     } catch (err) {
       toast.error(`${err}`);
     }

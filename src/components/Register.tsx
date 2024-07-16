@@ -50,6 +50,7 @@ const Register = () => {
               <Form.Control
                 type="number"
                 pattern="[0-9]*"
+                maxLength={10}
                 placeholder="Enter phone number"
                 name="phoneNumber"
                 value={formData.phoneNumber}

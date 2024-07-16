@@ -38,13 +38,13 @@ export const userRegistration = () => {
           body: JSON.stringify(dataToSend),
         }
       );
-      const data = await response.json();
+    //   const data = await response.json();
       if (!response.ok) {
         throw new Error(`Network response not ok`);
       }
       console.log(response);
-      console.log(data);
-      toast.success(`${data.message} `);
+    //   console.log(data);
+      toast.success(`User registered successfully`);
       navigate("/");
     } catch (error) {
       console.error("Error sending data:", error);
