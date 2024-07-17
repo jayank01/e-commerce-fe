@@ -1,44 +1,40 @@
-
-import { useState } from "react";
-import { Form,Button } from "react-bootstrap";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
+import { otpVerify } from "../../controller/passwordReset";
 const VerifyOtp = () => {
-    const navigate = useNavigate();
-    const [otp, setOtp] = useState("");
-    const handleVerifyOtp = async () => {
-        // Call your backend API to verify the OTP
-        // If successful, show a toast and set otpVerified to true
-        
-        toast.success("OTP verified");
-        navigate("/forgotPassword/updatePassword")
-      };
+    const {otp,handleChange,handleVerifyOtp} = otpVerify();
   return (
     <>
-      <Form.Group
-        controlId="formBasicOtp"
-        className=" w-50 mx-auto d-flex justify-content-center align-items-center group gap-3  p-2"
-      >
-        <Form.Label className="  my-auto font-weight-bold"> OTP</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="1234"
-          //   onChange={}
-          name="username"
-          value={otp}
-          className="p-2"
-          onChange={(e) => setOtp(e.target.value)}
-        />
-      </Form.Group>
-      <Button
-        variant="success"
-        className="mt-4 mx-auto d-block"
-        onClick={handleVerifyOtp}
-      >
-        Verify OTP
-      </Button>
+      <h1 className="w-100 text-center">Reset Password</h1>
+      <Form className="p-4 mt-2" onSubmit={handleVerifyOtp}>
+        <Form.Group
+          controlId="formBasicOtp"
+          className=" w-100 mx-auto d-flex justify-content-center align-items-center group gap-3 p-2"
+        >
+          <Form.Label className="  my-auto font-weight-bold"> OTP</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="****"
+            name="username"
+            value={otp}
+            className="p-2 w-50 text-center"
+            onChange={handleChange}
+            required
+          />
+          
+        </Form.Group>
+        {otp.length > 4 && <Form.Text id="otpHelpBlock" className="mx-auto d-block text-center text-danger">
+        Otp should be of 4 digit
+      </Form.Text>}
+        <Button
+          disabled={otp.length > 4}
+          variant="success"
+          className="mt-4 mx-auto d-block"
+          type="submit"
+        >
+          Verify OTP
+        </Button>
+      </Form>
     </>
   );
 };
-
 export default VerifyOtp;
