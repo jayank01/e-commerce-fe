@@ -49,8 +49,8 @@ const Register = () => {
               <Form.Label className="my-auto">Phone no</Form.Label>
               <Form.Control
                 type="number"
-                pattern="[0-9]*"
-                maxLength={10}
+                inputMode="numeric"
+                pattern="[0-9]{10}"
                 placeholder="Enter phone number"
                 name="phoneNumber"
                 value={formData.phoneNumber}

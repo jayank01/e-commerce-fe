@@ -64,6 +64,10 @@
   min-height: max-content;
 }
 
+.navbar{
+  height: 10vh;
+}
+
 /* Remove the arrow spinner from input type number*/
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

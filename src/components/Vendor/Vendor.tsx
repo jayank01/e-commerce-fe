@@ -1,8 +1,24 @@
+import Cookies from "js-cookie"
+import NavigationBar from "./NavigationBar"
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Dashboard from "./Dashboard";
 const Vendor = () => {
+
+  const cookies = Cookies.get('jwt');
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(cookies === undefined){
+        toast.error("Only Vendors are allowed")
+        navigate('/')
+    }
+  },[]);
   return (
-    <div className='w-100 vendor d-flex justify-content-center align-items-center bg-dark text-light'>
-        <h1>Welcome vendor</h1>
-    </div>
+    <>
+      <NavigationBar/>
+      <Dashboard/>
+    </>
   )
 }
 export default Vendor

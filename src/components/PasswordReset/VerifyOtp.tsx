@@ -1,10 +1,12 @@
 import { Form, Button } from "react-bootstrap";
 import { otpVerify } from "../../controller/passwordReset";
+import { Link } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
 const VerifyOtp = () => {
     const {otp,handleChange,handleVerifyOtp} = otpVerify();
   return (
     <>
-      <h1 className="w-100 text-center">Reset Password</h1>
+      <h1 className="w-100 text-center">Verify OTP</h1>
       <Form className="p-4 mt-2" onSubmit={handleVerifyOtp}>
         <Form.Group
           controlId="formBasicOtp"
@@ -34,6 +36,16 @@ const VerifyOtp = () => {
           Verify OTP
         </Button>
       </Form>
+      <div className="w-100 d-flex  align-items-center justify-content-start">
+        <Link
+          to={"/"}
+          className="d-block  text-dark  d-flex  align-items-center justify-content-center"
+          style={{ textDecoration: "none" }}
+        >
+          <IoMdArrowRoundBack className="mx-1"/>
+          Login
+        </Link>
+      </div>
     </>
   );
 };

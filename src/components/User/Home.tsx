@@ -1,8 +1,31 @@
+import { Outlet, useNavigate } from "react-router-dom";
+import NavigationBar from "./NavigationBar";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { SearchContext } from "./SearchContext";
+
 const Home = () => {
+  const navigate = useNavigate();
+  const cooki = Cookies.get("jwt");
+  // const stateData = useLocation();
+  // console.log(stateData.state.firstName)
+
+  useEffect(() => {
+    if (cooki === undefined) {
+      navigate("/");
+      toast.error("Log in to access the home page");
+    }
+  }),
+    [cooki, navigate];
+
   return (
-    <div className='w-100 home d-flex justify-content-center align-items-center bg-dark text-light'>
-        <h1>Welcome to Local Goods</h1>
-    </div>
-  )
-}
-export default Home
+    <>
+      <SearchContext>
+        <NavigationBar />
+        <Outlet />
+      </SearchContext>
+    </>
+  );
+};
+export default Home;
