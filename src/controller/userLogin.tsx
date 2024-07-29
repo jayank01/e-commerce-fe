@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { LoginData } from "../models/data.model";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
 
 export const userLogin = () => {
@@ -34,11 +34,12 @@ export const userLogin = () => {
       );
 
       const data = await response.json();
-    //   console.log(data);
+      console.log(data);
+      localStorage.setItem("userId",`${data.id}`)
       Cookies.set('jwt',`${data.jwtToken}`)
 
       if (!response.ok) {
-        throw new Error("Failed to Login");
+        throw new Error(`${data.message}`);
       }
       if(data.role === "ADMIN"){
         toast.success("Admin Logged in Successfully");
@@ -49,11 +50,11 @@ export const userLogin = () => {
         navigate("/vendor");
       }
       else{
-        navigate("/home");
+        navigate("/home",{state: data});
         toast.success("User Logged in Successfully");
       }
-    } catch (err) {
-      toast.error(`${err}`);
+    } catch (err :any) {
+      toast.error(`${err.message}`);
     }
   };
   return {loginData,handleChange,handleSubmit}

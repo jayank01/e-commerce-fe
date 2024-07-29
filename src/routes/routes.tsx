@@ -8,6 +8,9 @@ import ForgotPassword from "../components/PasswordReset/ForgotPassword";
 import VerifyEmail from "../components/PasswordReset/VerifyEmail";
 import VerifyOtp from "../components/PasswordReset/VerifyOtp";
 import UpdatePassword from "../components/PasswordReset/UpdatePassword";
+import AllProducts from "../components/User/AllProducts";
+import Orders from "../components/User/Orders";
+import AllOrders from "../components/User/AllOrders";
 
 const routes = createBrowserRouter([
     {
@@ -19,7 +22,18 @@ const routes = createBrowserRouter([
         element: <Register/>
     },{
         path: "/home",
-        element: <Home/>
+        element: <Home/>,
+        children:[{
+            path: "",
+            element: <AllProducts/>
+        },{
+            path: "/home/myCart",
+            element: <Orders/>
+        },{
+            path: "/home/myOrder",
+            element: <AllOrders/>
+        }
+        ]
     },{
         path: "/vendor",
         element: <Vendor/>
