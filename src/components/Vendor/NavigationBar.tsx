@@ -27,7 +27,8 @@ const NavigationBar = () => {
       >
         <Container
           fluid
-          className=" d-flex justify-content-around align-items-center"
+          className=" d-flex justify-content-around align-items-center bg-dark"
+          style={{minHeight: "10vh"}}
         >
           <Navbar.Brand href="/home" className="mx-5">
             Local Goods
@@ -35,8 +36,8 @@ const NavigationBar = () => {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
-              className="me-auto my-2 my-lg-0"
-              style={{ maxHeight: "100px" }}
+              className="me-auto my-2 my-lg-0 p-2 "
+              style={{ maxHeight: "auto" ,marginTop: "2%"}}
               navbarScroll
             >
               {/* <Nav.Link href="/vendor" >Welcome Vendor</Nav.Link> */}
@@ -52,7 +53,7 @@ const NavigationBar = () => {
           </Form> */}
             <Button
               variant="outline-danger"
-              className="mx-2"
+              className="d-block  my-2"
               onClick={handleLogout}
             >
               Logout

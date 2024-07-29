@@ -17,14 +17,17 @@ const AllProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("https://fakestoreapi.com/products");
+      const response = await fetch("http://localhost:8080/product/all");
+
+      const data = await response.json();
       if (!response.ok) {
         throw new Error("Network response not ok")
       }
-      const data = await response.json();
+      
+      console.log(data);
       setProducts(data); // Replace entire products array with fetched data
     } catch (error) {
-        toast.error("Failed to fetch")
+        toast.error("No products found ")
     }
   };
 
