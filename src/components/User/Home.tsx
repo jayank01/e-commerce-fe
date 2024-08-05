@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet,  useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
@@ -9,10 +9,11 @@ const Home = () => {
   const navigate = useNavigate();
   const cooki = Cookies.get("jwt");
   // const stateData = useLocation();
-  // console.log(stateData.state.firstName)
+  // console.log(stateData)
+  // console.log(sessionStorage.getItem('role'));
 
   useEffect(() => {
-    if (cooki === undefined) {
+    if (cooki === undefined ) {
       navigate("/");
       toast.error("Log in to access the home page");
     }

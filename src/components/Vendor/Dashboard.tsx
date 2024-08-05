@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Dropdown, Form, Modal } from "react-bootstrap";
+import { Dropdown, Form, Modal, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import toast from "react-hot-toast";
 import { AllProducts, Category } from "../../models/Interfaces";
 import { base64ToUrl } from "../../utils/base64ToUrl";
-
+import CreateCategory from "./Modals/CreateCategory";
+import UpdateProduct from "./Modals/UpdateProduct";
 
 interface Product {
   productName: string;
@@ -20,10 +21,20 @@ const Dashboard = () => {
   const [allCategory, setAllCategory] = useState<Category[]>([]);
   const [allProduct, setAllProduct] = useState<AllProducts[]>([]);
   // console.log(allCategory)
-  console.log(allProduct)
+  // console.log(allProduct)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
+  const [showCatUp, setShowCatUp] = useState(false);
+  const [showProdUp, setShowProdUp] = useState(false);
+  const [productId, setProductId] = useState(Number);
+  const handleCloseProdUp = () => setShowProdUp(false);
+  const handleShowProdUp = (id: number) => {
+    setShowProdUp(true);
+    setProductId(id);
+  };
+
+  // const [updatedProduct,setUpdatedProduct] = useState<Product>();
 
   const [createProduct, setCreateProduct] = useState<Product>({
     productName: "",
@@ -31,7 +42,6 @@ const Dashboard = () => {
     price: 0,
     quantity: 0,
   });
-
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     let { name, value } = e.target;
@@ -48,39 +58,95 @@ const Dashboard = () => {
   // console.log(selectedFile)
 
   const handleNewProduct = async () => {
-  
+    // const dataToSend = {...createProduct,stock: "In stock",photo: selectedFile.name}
     const formData = new FormData();
     // Append fields from createProduct
-    formData.append('productName',createProduct.productName);
-    formData.append('description',createProduct.description);
-    formData.append('price',createProduct.price.toString());
-    formData.append('quantity',createProduct.quantity.toString());
+    formData.append("productName", createProduct.productName);
+    formData.append("description", createProduct.description);
+    formData.append("price", createProduct.price.toString());
+    formData.append("stock", createProduct.quantity.toString());
     // Append additional fields
-    formData.append('categoryId', `${selectedCategory?.id}`);
-    formData.append('stock', 'Instock');
-    
+    formData.append("category", `${selectedCategory?.categoryName}`);
+    // formData.append("stock", "Instock");
+
     // Append the image file if selected
     if (selectedFile) {
-      formData.append('imageFile', selectedFile);
+      formData.append("photo", selectedFile);
     }
+
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
 
     setShowProd(false);
     // console.log(dataToSend);
-    
+
     try {
-      const res = await fetch("http://localhost:8080/product", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `http://localhost:8080/product/${localStorage.getItem("userId")}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await res.json();
-      // console.log(res);
+      console.log(data);
       if (!res.ok) {
         throw new Error(data.message);
       }
-      toast.success(data.message);
+      toast.success("Product Added Successfully");
 
       // console.log(data)
     } catch (error: any) {
+      // console.log(error);
+      toast.error(error.message);
+    }
+    fetchProducts();
+  };
+
+  const handleProductUp = async () => {
+    if (!productId) {
+      return;
+    }
+    // const dataToSend = {...createProduct,stock: "In stock",photo: selectedFile.name}
+    const formData = new FormData();
+    // Append fields from createProduct
+    formData.append("productName", createProduct.productName);
+    formData.append("description", createProduct.description);
+    formData.append("price", createProduct.price.toString());
+    formData.append("stock", createProduct.quantity.toString());
+    // Append additional fields
+    formData.append("category", `${selectedCategory?.categoryName}`);
+    // formData.append("stock", "Instock");
+
+    // Append the image file if selected
+    if (selectedFile) {
+      formData.append("photo", selectedFile);
+    }
+
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+
+    setShowProd(false);
+    // console.log(dataToSend);
+
+    try {
+      const res = await fetch(`http://localhost:8080/product/${productId}`, {
+        method: "PUT",
+        body: formData,
+      });
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+      toast.success("Product Updated Successfully");
+      handleCloseProdUp();
+
+      // console.log(data)
+    } catch (error: any) {
+      // console.log(error);
       toast.error(error.message);
     }
     fetchProducts();
@@ -92,44 +158,81 @@ const Dashboard = () => {
 
   // console.log(localStorage.getItem("userId"));
 
-  const handleClickCategory = async () => {
-    handleCloseCat();
-    // console.log(addCategory);
+  const handleClickCategoryUpdate = async () => {
+    handleShowCategoryup();
     try {
-      const res = await fetch("http://localhost:8080/category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          categoryName: addCategory,
-          userId: localStorage.getItem("userId"),
-        }),
-      });
+      const res = await fetch(
+        `http://localhost:8080/category/${localStorage.getItem("userId")}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            categoryName: addCategory,
+          }),
+        }
+      );
       const data = await res.json();
+      console.log(data);
       if (!res.ok) {
-        throw new Error(data.message);
+        throw new Error("Failed to edit category");
       }
-      toast.success(data.message);
+      toast.success("Category updated successfully");
 
       // console.log(data)
     } catch (error: any) {
       toast.error(error.message);
     }
-    fetchCategories();
+    await fetchCategories();
+    handleCloseCatup();
+  };
+
+  const handleClickCategory = async () => {
+    handleCloseCat();
+    // console.log(addCategory);
+    try {
+      const res = await fetch(
+        `http://localhost:8080/category/${localStorage.getItem("userId")}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            categoryName: addCategory,
+          }),
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      if (!res.ok) {
+        throw new Error("Failed to create successfully");
+      }
+      toast.success("Category added successfully");
+
+      // console.log(data)
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    await fetchCategories();
   };
   const [showCat, setShowCat] = useState(false);
 
   const handleCloseCat = () => setShowCat(false);
   const handleShowCategory = () => setShowCat(true);
   const [showProd, setShowProd] = useState(false);
+  const handleCloseCatup = () => setShowCatUp(false);
+  const handleShowCategoryup = () => setShowCatUp(true);
 
   const handleCloseProd = () => setShowProd(false);
   const handleShowProd = () => setShowProd(true);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8080/category/all");
+      const response = await fetch(
+        `http://localhost:8080/category/${localStorage.getItem("userId")}`
+      );
 
       const data = await response.json();
       if (!response.ok) {
@@ -143,34 +246,49 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/product/${id}`, {
+        method: "DELETE",
+      });
 
-  const handleDeleteCategory= async(id:number)=>{
+      if (!response.ok) {
+        throw new Error("Failed to delete category");
+      }
+
+      toast.success("Product deleted successfully");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    await fetchProducts();
+  };
+
+  const handleDeleteCategory = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:8080/category/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-  
+
+      // const errorData = await response.json();
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete category');
+        throw new Error("Failed to delete category");
       }
-      const data = await response.json();
-      toast.success(data.message);
-  
+      // const data = await response.json();
+      toast.success("Category deleted successfully");
     } catch (error: any) {
-      toast.error(error.message)
-      
+      toast.error(error.message);
     }
     await fetchCategories();
     await fetchProducts();
-    
-  }
+  };
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:8080/product/all");
+      const response = await fetch(
+        `http://localhost:8080/product/${localStorage.getItem("userId")}`
+      );
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error);
       }
@@ -188,46 +306,28 @@ const Dashboard = () => {
 
   return (
     <section
-      className="vendorDashboard mt-4  d-flex flex-column flex-wrap justify-content-center align-items-center"
+      className="vendorDashboard mt-4  d-flex  flex-wrap justify-content-end align-items-center"
       style={{ width: "100%" }}
     >
       <div
-        className="w-50 d-flex justify-content-around align-items-center mt-5 p-2"
-        style={{ minWidth: "300px" }}
+        className="w-50   mt- p-2 d-flex justify-content-end "
+        style={{ minWidth: "300px", marginRight: "15px" }}
       >
-        <Button variant="success" className="p-3" onClick={handleShowCategory}>
+        <Button
+          variant="success"
+          className="p-3 mx-3 d-inline-block"
+          onClick={handleShowCategory}
+        >
           Add Category
         </Button>
-        <Modal show={showCat} onHide={handleCloseCat}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add New Product Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Category</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Product category"
-                  autoFocus
-                  onChange={handleChangeCategory}
-                  value={addCategory}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseCat}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClickCategory}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+
+        <CreateCategory
+          showCat={showCat}
+          handleCloseCat={handleCloseCat}
+          handleChangeCategory={handleChangeCategory}
+          addCategory={addCategory}
+          handleClickCategory={handleClickCategory}
+        />
 
         <Button variant="success" className="p-3" onClick={handleShowProd}>
           Add Product
@@ -336,27 +436,141 @@ const Dashboard = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal show={showCatUp} onHide={handleCloseCatup}>
+          <Modal.Header closeButton>
+            <Modal.Title>Update Product Category</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Product Category</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter new Product category"
+                  autoFocus
+                  onChange={handleChangeCategory}
+                  value={addCategory}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseCatup}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClickCategoryUpdate}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <UpdateProduct
+          showProdUp={showProdUp}
+          handleCloseProdUp={handleCloseProdUp}
+          createProduct={createProduct}
+          handleChange={handleChange}
+          handleFileChange={handleFileChange}
+          selectedFile={selectedFile}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          allCategory={allCategory}
+          handleProductUp={handleProductUp}
+        />
       </div>
 
-      <div className="w-100 mt-5 d-flex justify-content-evenly align-items-center   flex-wrap p-5">
-        <div className="categories text-center " style={{ minWidth: "300px",width: "500px"  }}>
+      <div className="w-100 mt-5 r  p-2">
+        <div className="categories text-center " style={{ minWidth: "300px" }}>
           <h2 className="mt-2 bg-dark text-light p-2">All Categories</h2>
-          <div className="border mt-3 p-3">
-            {allCategory.map((ele) => (
-              <p key={ele.id} className="d-flex justify-content-between align-items-center">
-                {ele.categoryName} <span ><Button className="mx-5">Update</Button>
-                <Button variant="danger" onClick={()=>handleDeleteCategory(ele.id)}>Delete</Button></span>
-              </p>
-            ))}
+          <div className=" mt-3">
+            <Table responsive>
+              <thead>
+                <tr className="text-center align-middle">
+                  <th>Sr No</th>
+                  <th>Category Name</th>
+                  <th>Category Id</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allCategory.map((ele, index) => (
+                  <tr key={ele.id} className="text-center align-middle">
+                    <td>{index + 1}</td>
+                    <td>{ele.categoryName}</td>
+                    <td>{ele.id}</td>
+                    <td>
+                      <Button variant="primary" onClick={handleShowCategoryup}>
+                        Update
+                      </Button>
+                    </td>
+                    <td>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteCategory(ele.id)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
         </div>
-        <div className="products text-center " style={{ minWidth: "300px",width: "500px" }}>
+        <div
+          className="products text-center mt-5"
+          style={{ minWidth: "300px" }}
+        >
           <h2 className="mt-2 bg-dark text-light p-2">All Products</h2>
-          <div className="mt-2 border p-3 mt-3">
-            {allProduct.map((ele)=> 
-              // <p key={ele.id}>{ele.productName}</p>
-              <img src={base64ToUrl(ele.imageFileBase64)} height={150} width={150} className="d-block justify-content-center align-items-center mx-auto"  style={{objectFit: "contain"}}/>
-            )}
+          <div className="mt-3 ">
+            <Table responsive>
+              <thead>
+                <tr className="text-center align-middle">
+                  <th>Sr No</th>
+                  <th>Product Name</th>
+                  <th>Product Description</th>
+                  <th>Product Price</th>
+                  <th>Product Image</th>
+                  <th>Product Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allProduct.map((ele, index) => (
+                  <tr key={ele.id} className="text-center align-middle">
+                    <td>{index + 1}</td>
+                    <td>{ele.productName}</td>
+                    <td>{ele.description}</td>
+                    <td>{ele.price}</td>
+                    <td>
+                      <img
+                        src={base64ToUrl(ele.image)}
+                        className="image-scale d-block mx-auto"
+                        style={{ height: "50px", width: "50px" }}
+                      />
+                    </td>
+                    <td>{ele.stock}</td>
+                    <td>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleShowProdUp(ele.id)}
+                      >
+                        Update
+                      </Button>
+                    </td>
+                    <td>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteProduct(ele.id)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
         </div>
       </div>

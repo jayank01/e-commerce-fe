@@ -11,6 +11,7 @@ import UpdatePassword from "../components/PasswordReset/UpdatePassword";
 import AllProducts from "../components/User/AllProducts";
 import Orders from "../components/User/Orders";
 import AllOrders from "../components/User/AllOrders";
+import Profile from "../components/User/Profile";
 
 const routes = createBrowserRouter([
     {
@@ -32,6 +33,9 @@ const routes = createBrowserRouter([
         },{
             path: "/home/myOrder",
             element: <AllOrders/>
+        },{
+            path: "/home/profile",
+            element: <Profile/>
         }
         ]
     },{

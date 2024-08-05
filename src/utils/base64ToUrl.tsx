@@ -1,6 +1,6 @@
-export const base64ToUrl = (base64String: string | undefined, mimeType: string = 'image/jpeg'): string | undefined => {
+export const base64ToUrl = (base64String: string | undefined, mimeType: string = 'image/jpeg/png'): string | undefined => {
     if (!base64String) {
-      console.error("Base64 string is undefined or empty");
+      // console.error("Base64 string is undefined or empty");
       return undefined;
     }
   

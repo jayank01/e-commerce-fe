@@ -10,21 +10,21 @@ const AllProducts = () => {
   const [index, setIndex] = useState(0);
   const { searchTerm } = useSearch();
 //   console.log(searchTerm);
-//   console.log(products);
+  console.log(products);
   const handleSelect = (selectedIndex: SetStateAction<number>) => {
     setIndex(selectedIndex);
   };
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:8080/product/all");
+      const response = await fetch("http://localhost:8080/product");
 
       const data = await response.json();
       if (!response.ok) {
         throw new Error("Network response not ok")
       }
       
-      console.log(data);
+      // console.log(data);
       setProducts(data); // Replace entire products array with fetched data
     } catch (error) {
         toast.error("No products found ")
@@ -38,7 +38,7 @@ const AllProducts = () => {
   useEffect(() => {
     if (searchTerm) {
       const filteredProducts = products.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setProducts(filteredProducts);
     }
@@ -50,6 +50,7 @@ const AllProducts = () => {
   return (
     <>
       <Carousel
+        interval={2000}
         className="mx-auto rounded overflow-hidden"
         activeIndex={index}
         onSelect={handleSelect}
@@ -82,8 +83,8 @@ const AllProducts = () => {
       </Carousel>
       <Container className="mt-5 d-flex justify-content-center align-items-center ">
         <Row>
-          {products.map((product, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-4">
+          {products.map((product) => (
+            <Col key={product.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
               <ProductCard data={product} />
             </Col>
           ))}

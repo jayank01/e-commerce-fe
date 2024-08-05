@@ -34,7 +34,9 @@ export const userLogin = () => {
       );
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data)
+
+      sessionStorage.setItem('role',data.role)
       localStorage.setItem("userId",`${data.id}`)
       Cookies.set('jwt',`${data.jwtToken}`)
 

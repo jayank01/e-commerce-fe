@@ -1,15 +1,25 @@
-import { Form, Button, FormGroup } from "react-bootstrap";
+import { Form, Button, FormGroup, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { userRegistration } from "../controller/userRegistration";
 import { REGISTER_HEADING } from "../utils/constants";
+import OtpModal from "./OtpModal";
 
 const Register = () => {
-  const {formData,handleChange,handleSubmit} = userRegistration();
+  const {
+    formData,
+    handleChange,
+    handleSubmit,
+    showModal,
+    loading,
+    handleOtpSubmit,
+    setShowModal,
+  } = userRegistration();
+
   return (
     <>
       <div className="main  d-flex justify-content-center align-items-center ">
         <div className="formContainer  d-flex flex-column justify-content-center align-items-center">
-          <h1 >{REGISTER_HEADING}</h1>
+          <h1>{REGISTER_HEADING}</h1>
 
           <Form className="mt-3 " onSubmit={handleSubmit}>
             <Form.Group
@@ -48,9 +58,7 @@ const Register = () => {
             >
               <Form.Label className="my-auto">Phone no</Form.Label>
               <Form.Control
-                type="number"
                 inputMode="numeric"
-                pattern="[0-9]{10}"
                 placeholder="Enter phone number"
                 name="phoneNumber"
                 value={formData.phoneNumber}
@@ -89,12 +97,14 @@ const Register = () => {
               />
             </Form.Group>
 
-            <Form.Group
-              className="mt-4 d-flex align-items-center mx-2 "
-            >
-              <Form.Check id="checkBox" name="role" value={"VENDOR"} onChange={handleChange} />
+            <Form.Group className="mt-4 d-flex align-items-center mx-2 ">
+              <Form.Check
+                id="checkBox"
+                name="role"
+                value={"VENDOR"}
+                onChange={handleChange}
+              />
               <p className="mx-3 my-auto">Regsiter as Vendor</p>
-             
             </Form.Group>
 
             <FormGroup className="mt-4 d-flex align-items-center group ">
@@ -105,12 +115,32 @@ const Register = () => {
                 </Link>
               </p>
               <Button variant="primary" type="submit" className="">
-                Register
+                {loading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="mr-2"
+                    />
+                    Validating..
+                  </>
+                ) : (
+                  "Register"
+                )}
               </Button>
             </FormGroup>
           </Form>
         </div>
       </div>
+
+      <OtpModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        handleOtpSubmit={handleOtpSubmit}
+      />
     </>
   );
 };

@@ -76,7 +76,7 @@ export const otpVerify = () => {
       if (!response.ok) {
         throw new Error(`${data.message}`);
       }
-      toast.success("OTP verified",{duration: 5000});
+      toast.success("OTP verified");
       navigate("/forgotPassword/updatePassword", {
         state: location.state.email,
       });
