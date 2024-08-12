@@ -6,6 +6,8 @@ import { AllProducts, Category } from "../../models/Interfaces";
 import { base64ToUrl } from "../../utils/base64ToUrl";
 import CreateCategory from "./Modals/CreateCategory";
 import UpdateProduct from "./Modals/UpdateProduct";
+import { FaTrash } from "react-icons/fa6";
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 interface Product {
   productName: string;
@@ -309,189 +311,167 @@ const Dashboard = () => {
       className="vendorDashboard mt-4  d-flex  flex-wrap justify-content-end align-items-center"
       style={{ width: "100%" }}
     >
-      <div
-        className="w-50   mt- p-2 d-flex justify-content-end "
-        style={{ minWidth: "300px", marginRight: "15px" }}
-      >
-        <Button
-          variant="success"
-          className="p-3 mx-3 d-inline-block"
-          onClick={handleShowCategory}
-        >
-          Add Category
-        </Button>
+      <CreateCategory
+        showCat={showCat}
+        handleCloseCat={handleCloseCat}
+        handleChangeCategory={handleChangeCategory}
+        addCategory={addCategory}
+        handleClickCategory={handleClickCategory}
+      />
 
-        <CreateCategory
-          showCat={showCat}
-          handleCloseCat={handleCloseCat}
-          handleChangeCategory={handleChangeCategory}
-          addCategory={addCategory}
-          handleClickCategory={handleClickCategory}
-        />
+      <Modal show={showProd} onHide={handleCloseProd}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Product </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Product Name"
+                autoFocus
+                name="productName"
+                onChange={handleChange}
+                value={createProduct.productName}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Product description"
+                autoFocus
+                name="description"
+                onChange={handleChange}
+                value={createProduct.description}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                pattern="[0-9]*"
+                inputMode="numeric"
+                placeholder="Enter Product price"
+                autoFocus
+                name="price"
+                onChange={handleChange}
+                value={createProduct.price}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Product Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]"
+                placeholder="Enter Product Quantity"
+                autoFocus
+                name="quantity"
+                onChange={handleChange}
+                value={createProduct.quantity}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="image">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+              />
+            </Form.Group>
+            <Dropdown>
+              <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                {selectedCategory
+                  ? selectedCategory.categoryName
+                  : "Select Category"}
+              </Dropdown.Toggle>
 
-        <Button variant="success" className="p-3" onClick={handleShowProd}>
-          Add Product
-        </Button>
+              <Dropdown.Menu>
+                {allCategory.map((ele) => (
+                  <Dropdown.Item
+                    key={ele.id}
+                    onClick={() => setSelectedCategory(ele)}
+                  >
+                    {ele.categoryName}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleCloseProd}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleNewProduct}>
+            Add Product
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <Modal show={showProd} onHide={handleCloseProd}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add New Product </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Product Name"
-                  autoFocus
-                  name="productName"
-                  onChange={handleChange}
-                  value={createProduct.productName}
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Product description"
-                  autoFocus
-                  name="description"
-                  onChange={handleChange}
-                  value={createProduct.description}
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Price</Form.Label>
-                <Form.Control
-                  type="number"
-                  pattern="[0-9]*"
-                  inputMode="numeric"
-                  placeholder="Enter Product price"
-                  autoFocus
-                  name="price"
-                  onChange={handleChange}
-                  value={createProduct.price}
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Quantity</Form.Label>
-                <Form.Control
-                  type="number"
-                  inputMode="numeric"
-                  pattern="[0-9]"
-                  placeholder="Enter Product Quantity"
-                  autoFocus
-                  name="quantity"
-                  onChange={handleChange}
-                  value={createProduct.quantity}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="image">
-                <Form.Label>Product Image</Form.Label>
-                <Form.Control
-                  type="file"
-                  name="image"
-                  onChange={handleFileChange}
-                />
-              </Form.Group>
-              <Dropdown>
-                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                  {selectedCategory
-                    ? selectedCategory.categoryName
-                    : "Select Category"}
-                </Dropdown.Toggle>
+      <Modal show={showCatUp} onHide={handleCloseCatup}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Product Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter new Product category"
+                autoFocus
+                onChange={handleChangeCategory}
+                value={addCategory}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleCloseCatup}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleClickCategoryUpdate}>
+            Add Category
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-                <Dropdown.Menu>
-                  {allCategory.map((ele) => (
-                    <Dropdown.Item
-                      key={ele.id}
-                      onClick={() => setSelectedCategory(ele)}
-                    >
-                      {ele.categoryName}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseProd}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleNewProduct}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      <UpdateProduct
+        showProdUp={showProdUp}
+        handleCloseProdUp={handleCloseProdUp}
+        createProduct={createProduct}
+        handleChange={handleChange}
+        handleFileChange={handleFileChange}
+        selectedFile={selectedFile}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        allCategory={allCategory}
+        handleProductUp={handleProductUp}
+      />
 
-        <Modal show={showCatUp} onHide={handleCloseCatup}>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Product Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Product Category</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter new Product category"
-                  autoFocus
-                  onChange={handleChangeCategory}
-                  value={addCategory}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseCatup}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClickCategoryUpdate}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <UpdateProduct
-          showProdUp={showProdUp}
-          handleCloseProdUp={handleCloseProdUp}
-          createProduct={createProduct}
-          handleChange={handleChange}
-          handleFileChange={handleFileChange}
-          selectedFile={selectedFile}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          allCategory={allCategory}
-          handleProductUp={handleProductUp}
-        />
-      </div>
-
-      <div className="w-100 mt-5 r  p-2">
+      <div className="w-100 mt-2   p-2">
         <div className="categories text-center " style={{ minWidth: "300px" }}>
-          <h2 className="mt-2 bg-dark text-light p-2">All Categories</h2>
-          <div className=" mt-3">
-            <Table responsive>
+          <div className="d-flex justify-content-between align-items-center bg-dark text-light p-2">
+            <h2 className="mt-2 bg-dark text-light">Categories</h2>
+            <Button
+              variant="success"
+              className="p-3 mx-3 d-inline-block"
+              onClick={handleShowCategory}
+            >
+              Add Category
+            </Button>
+          </div>
+          <div className=" mt-3 ">
+            <Table responsive   className="mx-auto" >
               <thead>
                 <tr className="text-center align-middle">
-                  <th>Sr No</th>
-                  <th>Category Name</th>
+                  <th>SNo</th>
+                  <th>Name</th>
                   <th>Category Id</th>
+                  <th colSpan={2}>Edit/Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -502,7 +482,7 @@ const Dashboard = () => {
                     <td>{ele.id}</td>
                     <td>
                       <Button variant="primary" onClick={handleShowCategoryup}>
-                        Update
+                      <HiOutlinePencilAlt />
                       </Button>
                     </td>
                     <td>
@@ -510,7 +490,7 @@ const Dashboard = () => {
                         variant="danger"
                         onClick={() => handleDeleteCategory(ele.id)}
                       >
-                        Delete
+                        <FaTrash />
                       </Button>
                     </td>
                   </tr>
@@ -523,17 +503,27 @@ const Dashboard = () => {
           className="products text-center mt-5"
           style={{ minWidth: "300px" }}
         >
-          <h2 className="mt-2 bg-dark text-light p-2">All Products</h2>
+          <div className="d-flex justify-content-between align-items-center bg-dark text-light p-2">
+            <h2 className="mt-2 bg-dark text-light">Products</h2>
+            <Button
+              variant="success"
+              className="p-3 mx-3 d-inline-block"
+              onClick={handleShowProd}
+            >
+              Add Product
+            </Button>
+          </div>
           <div className="mt-3 ">
             <Table responsive>
               <thead>
                 <tr className="text-center align-middle">
-                  <th>Sr No</th>
-                  <th>Product Name</th>
-                  <th>Product Description</th>
-                  <th>Product Price</th>
-                  <th>Product Image</th>
-                  <th>Product Stock</th>
+                  <th>SNo</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Image</th>
+                  <th>Stock</th>
+                  <th colSpan={2}>Edit/Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -556,7 +546,7 @@ const Dashboard = () => {
                         variant="primary"
                         onClick={() => handleShowProdUp(ele.id)}
                       >
-                        Update
+                        <HiOutlinePencilAlt />
                       </Button>
                     </td>
                     <td>
@@ -564,7 +554,7 @@ const Dashboard = () => {
                         variant="danger"
                         onClick={() => handleDeleteProduct(ele.id)}
                       >
-                        Delete
+                        <FaTrash />
                       </Button>
                     </td>
                   </tr>

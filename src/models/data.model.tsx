@@ -11,3 +11,11 @@ export interface UserData {
     phoneNumber: string;
     role: string;
 }  
+
+export type Cart={
+    productId:number;
+    productName:string;
+    price:number;
+    description:string;
+    quantity:number
+}

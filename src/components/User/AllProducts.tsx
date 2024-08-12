@@ -4,13 +4,14 @@ import { Product } from "../../models/Interfaces";
 import { Carousel, Col, Container, Row } from "react-bootstrap";
 import { useSearch } from "./SearchContext";
 import toast from "react-hot-toast";
+import { useCartController } from "../../controller/useCartController";
 
 const AllProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [index, setIndex] = useState(0);
   const { searchTerm } = useSearch();
-//   console.log(searchTerm);
-  console.log(products);
+  const { handleAddToCart } = useCartController();
+
   const handleSelect = (selectedIndex: SetStateAction<number>) => {
     setIndex(selectedIndex);
   };
@@ -81,11 +82,12 @@ const AllProducts = () => {
           />
         </Carousel.Item>
       </Carousel>
-      <Container className="mt-5 d-flex justify-content-center align-items-center ">
+      <Container className="mt-5 d-flex justify-content-center align-items-center  ">
         <Row>
           {products.map((product) => (
-            <Col key={product.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-              <ProductCard data={product} />
+            <Col key={product.id} xs={14} sm={6} md={4} lg={3} className="mb-4 ">
+              <ProductCard data={product} onAddToCart={handleAddToCart} />
+              {/* <ProductCard data={product}  /> */}
             </Col>
           ))}
         </Row>

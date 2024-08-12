@@ -89,6 +89,7 @@ export const userRegistration = () => {
       const otpVerificationData = await otpVerificationResponse.json();
 
       if (!otpVerificationResponse.ok) {
+        setLoading(false)
         throw new Error(`${otpVerificationData.message}`);
       }
       
@@ -118,7 +119,7 @@ export const userRegistration = () => {
       toast.error(err.message);
     } finally {
       setShowModal(false); // Hide OTP modal
-      
+      setLoading(false);
     }
   };
 

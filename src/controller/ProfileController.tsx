@@ -27,13 +27,11 @@ const ProfileController = () => {
   const fetchUserData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/users/${localStorage.getItem("userId")}`,
-        {
-          method: "GET",
-        }
+        `http://localhost:8080/users/${localStorage.getItem("userId")}`
       );
 
       const data = await res.json();
+      console.log(data)
       if (!res.ok) {
         throw new Error("Response not ok");
       }
