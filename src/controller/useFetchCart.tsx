@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Cart } from "../models/data.model";
 import toast from "react-hot-toast";
 
 
-const useFetchCart = () => {
+export const useFetchCart = () => {
     const [cartItems,setCartItems] = useState<Cart[]>([]);
-    const fetchCart =async()=>{
+    const fetchCart = useCallback(async()=>{
         try{
             const response = await fetch(`http://localhost:8080/cart/${localStorage.getItem('userId')}`)
             const data = await response.json();
@@ -16,11 +16,11 @@ const useFetchCart = () => {
         }catch(error:any){
             toast.error(error.message)
         }
-    }
+        
+    },[])
   return {
     cartItems,
     fetchCart
   }
 }
 
-export default useFetchCart

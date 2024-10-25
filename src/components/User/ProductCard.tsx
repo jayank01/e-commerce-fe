@@ -7,7 +7,7 @@ import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 
 interface ProductCardProps {
   data: Product;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (id: number) => void;
 }
 const ProductCard: React.FC<ProductCardProps> = ({ data,onAddToCart}) => {
   let { productName, price, image, description} = data;
@@ -33,7 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data,onAddToCart}) => {
         <Card.Text className="d-flex justify-content-start align-items-center "><RiMoneyRupeeCircleFill className="mx-1 "/> {price}</Card.Text>
         {/* <Card.Text>Category: {category.categoryName}</Card.Text> */}
       
-          <Button variant="success" className="w-100" onClick={()=> onAddToCart(data)}>Add to Cart</Button>
+          <Button variant="success" className="w-100" onClick={()=> onAddToCart(data.id)}>Add to Cart</Button>
           {/* <Button variant="success" className="w-100" >Add to Cart</Button> */}
        
       </Card.Body>

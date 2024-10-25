@@ -9,9 +9,8 @@ import toast from "react-hot-toast";
 import { useSearch } from "./SearchContext";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
-// import ProfileController from "../../controller/ProfileController";
-// import { base64ToUrl } from "../../utils/base64ToUrl";
-import useFetchCart from "../../controller/useFetchCart";
+import {useFetchCart} from "../../controller/useFetchCart";
+
 
 
 const NavigationBar = () => {
@@ -19,9 +18,9 @@ const NavigationBar = () => {
   const [search, setSearch] = useState("");
   const navigator = useNavigate();
   const location = useLocation();
-  // const { userData} = ProfileController();
   const {cartItems,fetchCart} = useFetchCart();
-  // console.log(userData);
+ 
+
 
   const handleLogout = () => {
     Cookies.remove("jwt");
@@ -38,9 +37,12 @@ const NavigationBar = () => {
   };
   const isActive = (path: string) => location.pathname === path;
 
+
   useEffect(()=>{
     fetchCart();
-  },[cartItems])
+    
+  },[])
+  // console.log("CartItems ",cartItems)
   return (
     <Navbar
       sticky="top"
@@ -92,7 +94,7 @@ const NavigationBar = () => {
               href="/home/myCart"
               style={{ color: isActive("/home/myCart") ? "orange" : "white" }}
             >
-              {cartItems.length > 0 ? `Cart (${cartItems.length})` : `Cart`}
+              {cartItems?.length > 0 ? `Cart (${cartItems?.length})` : `Cart`}
             </Nav.Link>
           </Nav>
           <Form className="d-flex " style={{ marginRight: "15%" }}>

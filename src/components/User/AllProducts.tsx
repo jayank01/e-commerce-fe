@@ -10,7 +10,7 @@ const AllProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [index, setIndex] = useState(0);
   const { searchTerm } = useSearch();
-  const { handleAddToCart } = useCartController();
+  const { addCartApi } = useCartController();
 
   const handleSelect = (selectedIndex: SetStateAction<number>) => {
     setIndex(selectedIndex);
@@ -86,7 +86,7 @@ const AllProducts = () => {
         <Row>
           {products.map((product) => (
             <Col key={product.id} xs={14} sm={6} md={4} lg={3} className="mb-4 ">
-              <ProductCard data={product} onAddToCart={handleAddToCart} />
+              <ProductCard data={product} onAddToCart={addCartApi} />
               {/* <ProductCard data={product}  /> */}
             </Col>
           ))}
